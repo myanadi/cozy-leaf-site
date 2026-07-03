@@ -1,0 +1,350 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>🌿 Cozy-Leaf — 포근잎 마을의 마녀 제빵사</title>
+<meta name="description" content="할머니의 낡은 화덕에 다시 불을 지필 시간. 포근잎 마을에서 시작하는 힐링 베이커리 생활 시뮬레이션.">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/galmuri@latest/dist/galmuri.css">
+<style>
+/* ═══════════════════════════════════════════
+   ▼ 여기만 바꾸면 됨: GAME START 버튼 링크
+   두 버튼 모두 href를 배포 링크로 교체
+   ═══════════════════════════════════════════ */
+:root {
+  --paper:   #FBF3E1;
+  --paper2:  #F3E6C9;
+  --ink:     #5A4232;
+  --ink-soft:#8A6F58;
+  --crust:   #B8896B;
+  --crust-d: #8C6247;
+  --rose:    #D97B94;
+  --leaf:    #7FA96B;
+  --leaf-d:  #5D8250;
+  --gold:    #E0B24F;
+  --sky:     #BEE3F0;
+  --sky-d:   #9CCFE3;
+  --px: 4px;
+}
+
+* { margin:0; padding:0; box-sizing:border-box; }
+html { scroll-behavior:smooth; }
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation-duration:0.01ms !important; animation-iteration-count:1 !important; transition-duration:0.01ms !important; }
+}
+
+body {
+  font-family:'Galmuri11', 'Galmuri9', monospace;
+  background:var(--paper);
+  color:var(--ink);
+  line-height:1.9;
+  font-size:16px;
+  image-rendering:pixelated;
+  overflow-x:hidden;
+}
+
+h1,h2,h3,.pixel-btn,.slot-name,.eyebrow { font-family:'Galmuri14','Galmuri11',monospace; }
+
+/* ── 픽셀 프레임 공통 ── */
+.pxframe {
+  position:relative;
+  border:var(--px) solid var(--ink);
+  box-shadow:
+    inset 0 0 0 var(--px) var(--paper),
+    var(--px) var(--px) 0 0 rgba(90,66,50,.25);
+}
+
+/* ═══════════ HERO ═══════════ */
+.hero {
+  min-height:100svh;
+  display:flex; flex-direction:column; align-items:center; justify-content:center;
+  text-align:center;
+  padding:48px 20px 96px;
+  background:linear-gradient(to bottom, var(--sky) 0%, var(--sky) 55%, #D8ECD2 78%, #C2DFB8 100%);
+  position:relative;
+  overflow:hidden;
+  border-bottom:var(--px) solid var(--ink);
+}
+
+.cloud {
+  position:absolute;
+  width:24px; height:8px;
+  background:#fff;
+  box-shadow:
+    24px 0 #fff, 48px 0 #fff, 72px 0 #fff,
+    16px -8px #fff, 40px -8px #fff, 56px -8px #fff,
+    8px 8px #fff, 32px 8px #fff, 56px 8px #fff, 80px 8px #fff;
+  opacity:.9;
+  animation:drift linear infinite;
+}
+.cloud.c1 { top:12%; left:-120px; animation-duration:52s; transform:scale(1.4); }
+.cloud.c2 { top:26%; left:-120px; animation-duration:74s; animation-delay:-30s; transform:scale(.9); opacity:.7; }
+.cloud.c3 { top:7%;  left:-120px; animation-duration:63s; animation-delay:-48s; transform:scale(1.1); opacity:.8; }
+@keyframes drift { to { transform:translateX(calc(100vw + 260px)); } }
+
+.hero::after {
+  content:''; position:absolute; bottom:0; left:0; right:0; height:16px;
+  background-image:
+    linear-gradient(to right, var(--leaf-d) 4px, transparent 4px),
+    linear-gradient(to right, var(--leaf) 4px, transparent 4px);
+  background-size:16px 8px, 8px 16px;
+  background-position:0 8px, 4px 0;
+  opacity:.55;
+}
+
+.eyebrow {
+  display:inline-block;
+  background:var(--ink); color:var(--paper);
+  padding:4px 14px 2px;
+  font-size:12px; letter-spacing:2px;
+  margin-bottom:22px;
+}
+
+.title {
+  font-size:clamp(30px, 7.5vw, 64px);
+  line-height:1.28;
+  color:var(--crust-d);
+  text-shadow:var(--px) var(--px) 0 rgba(90,66,50,.28);
+  margin-bottom:12px;
+}
+.title .rose { color:var(--rose); }
+.subtitle {
+  font-size:clamp(14px, 2.6vw, 19px);
+  color:var(--ink);
+  margin-bottom:40px;
+}
+
+/* ── CSS 픽셀 화덕 ── */
+.oven-scene { margin:6px auto 40px; width:176px; position:relative; }
+.oven {
+  width:176px; height:132px; margin:0 auto; position:relative;
+  background:var(--crust);
+  border:var(--px) solid var(--ink);
+  box-shadow:inset 0 -12px 0 var(--crust-d), var(--px) var(--px) 0 rgba(90,66,50,.25);
+}
+.oven::before {
+  content:''; position:absolute; top:-20px; left:-12px; right:-12px; height:16px;
+  background:var(--crust-d); border:var(--px) solid var(--ink);
+}
+.oven-mouth {
+  position:absolute; left:50%; top:26px; transform:translateX(-50%);
+  width:88px; height:64px;
+  background:#3A2A1E;
+  border:var(--px) solid var(--ink);
+  border-radius:44px 44px 0 0;
+  overflow:hidden;
+}
+.fire {
+  position:absolute; bottom:0; left:50%; transform:translateX(-50%);
+  width:48px; height:24px;
+  background:var(--gold);
+  box-shadow: -12px 6px 0 #E8843C, 12px 6px 0 #E8843C, 0 -8px 0 #F3D06B;
+  animation:flick .7s steps(2) infinite;
+}
+@keyframes flick { 50% { transform:translateX(-50%) scaleY(.82); } }
+.bread-in-oven {
+  position:absolute; bottom:4px; left:50%; transform:translateX(-50%);
+  font-size:22px; filter:drop-shadow(0 2px 0 rgba(0,0,0,.4));
+}
+.smoke { position:absolute; top:-34px; left:50%; width:12px; height:12px; background:rgba(255,255,255,.92); animation:puff 3.2s steps(6) infinite; }
+.smoke.s2 { animation-delay:1.05s; }
+.smoke.s3 { animation-delay:2.1s; }
+@keyframes puff {
+  0%   { transform:translate(-50%,0) scale(.6); opacity:0; }
+  20%  { opacity:.95; }
+  100% { transform:translate(calc(-50% + 26px),-72px) scale(1.7); opacity:0; }
+}
+
+/* ── GAME START 버튼 ── */
+.pixel-btn {
+  display:inline-block;
+  background:var(--rose); color:#fff;
+  font-size:clamp(17px, 3vw, 22px);
+  padding:16px 40px 13px;
+  border:var(--px) solid var(--ink);
+  box-shadow:inset calc(var(--px)*-1) calc(var(--px)*-1) 0 rgba(0,0,0,.22), 0 var(--px) 0 var(--ink), 0 8px 0 rgba(90,66,50,.3);
+  text-decoration:none;
+  cursor:pointer;
+  transition:transform .06s;
+  letter-spacing:1px;
+}
+.pixel-btn:hover { filter:brightness(1.06); }
+.pixel-btn:active { transform:translateY(4px); box-shadow:inset calc(var(--px)*-1) calc(var(--px)*-1) 0 rgba(0,0,0,.22), 0 0 0 var(--ink); }
+.pixel-btn:focus-visible { outline:4px dashed var(--ink); outline-offset:4px; }
+.pixel-btn.leaf { background:var(--leaf); }
+
+.press-start {
+  margin-top:18px; font-size:13px; color:var(--ink-soft);
+  animation:blink 1.4s steps(1) infinite;
+}
+@keyframes blink { 50% { opacity:.15; } }
+
+/* ═══════════ 공통 섹션 ═══════════ */
+section { padding:88px 20px; }
+.wrap { max-width:880px; margin:0 auto; }
+.sec-head { text-align:center; margin-bottom:48px; }
+.sec-head .deco { font-size:15px; color:var(--crust); letter-spacing:6px; }
+.sec-head h2 { font-size:clamp(24px, 4.6vw, 34px); color:var(--crust-d); margin-top:8px; }
+.sec-head p { color:var(--ink-soft); font-size:14px; margin-top:6px; }
+
+/* ═══════════ STORY ═══════════ */
+.story { background:var(--paper2); border-bottom:var(--px) solid var(--ink); }
+.diary {
+  background:var(--paper);
+  padding:44px 34px;
+  max-width:680px; margin:0 auto;
+}
+.diary p { margin-bottom:20px; font-size:15px; }
+.diary p:last-child { margin-bottom:0; font-style:italic; color:var(--crust-d); text-align:center; padding-top:10px; }
+.diary em { font-style:normal; color:var(--rose); }
+.diary strong { color:var(--leaf-d); font-weight:normal; }
+
+/* ═══════════ FEATURES ═══════════ */
+.features { background:var(--paper); }
+.slot-grid {
+  display:grid; grid-template-columns:repeat(auto-fit, minmax(240px, 1fr));
+  gap:22px;
+}
+.slot {
+  background:var(--paper2);
+  padding:26px 22px 24px;
+  transition:transform .08s;
+}
+.slot:hover { transform:translate(-2px,-2px); }
+.slot .icon { font-size:34px; display:block; margin-bottom:10px; filter:drop-shadow(2px 2px 0 rgba(90,66,50,.2)); }
+.slot-name { font-size:17px; color:var(--crust-d); margin-bottom:8px; }
+.slot p { font-size:13.5px; color:var(--ink); line-height:1.85; }
+.slot .tag { display:inline-block; margin-top:12px; font-size:11px; color:#fff; background:var(--leaf); padding:3px 9px 1px; }
+.slot .tag.rose { background:var(--rose); }
+.slot .tag.gold { background:var(--gold); color:var(--ink); }
+
+/* ═══════════ FOOTER CTA ═══════════ */
+.final { text-align:center; background:var(--paper); border-top:var(--px) solid var(--ink); }
+.final h2 { font-size:clamp(22px, 4.4vw, 32px); color:var(--crust-d); margin-bottom:14px; line-height:1.5; }
+.final .bread-row { font-size:26px; letter-spacing:12px; margin-bottom:30px; }
+
+footer {
+  border-top:var(--px) solid var(--ink);
+  background:var(--paper2);
+  padding:28px 20px; text-align:center;
+  font-size:12px; color:var(--ink-soft); line-height:2;
+}
+footer b { color:var(--ink); font-weight:normal; }
+
+@media (max-width:520px) {
+  section { padding:64px 16px; }
+  .diary { padding:32px 20px; }
+}
+</style>
+</head>
+<body>
+
+<!-- ═══════════ HERO ═══════════ -->
+<header class="hero">
+  <div class="cloud c1"></div>
+  <div class="cloud c2"></div>
+  <div class="cloud c3"></div>
+
+  <span class="eyebrow">🌿 COZY-LEAF · LIFE SIM</span>
+
+  <h1 class="title">잠들었던 화덕에,<br><span class="rose">다시 불을 지필 시간</span></h1>
+  <p class="subtitle">포근잎 마을에서 시작하는 마녀 제빵사의 하루</p>
+
+  <div class="oven-scene" aria-hidden="true">
+    <div class="oven">
+      <div class="smoke s1"></div><div class="smoke s2"></div><div class="smoke s3"></div>
+      <div class="oven-mouth">
+        <div class="fire"></div>
+        <div class="bread-in-oven">🍞</div>
+      </div>
+    </div>
+  </div>
+
+  <a class="pixel-btn" href="https://drive.proton.me/urls/8P2TW4X3SR#Gude48dqh2BW" target="_blank" rel="noopener" id="gameStart">▶ GAME START</a>
+  <div class="press-start">- PRESS START -</div>
+</header>
+
+<!-- ═══════════ STORY ═══════════ -->
+<section class="story">
+  <div class="wrap">
+    <div class="sec-head">
+      <div class="deco">✦ ✦ ✦</div>
+      <h2>STORY</h2>
+      <p>어느 초보 마녀 제빵사의 이야기</p>
+    </div>
+
+    <div class="diary pxframe">
+      <p>당신은 전설적인 대마녀 제빵사였던 <strong>할머니</strong>와, 소박하지만 따뜻한 동네 빵집을 꾸리던 어머니의 대를 이은 <em>초보 마녀 제빵사</em>.</p>
+      <p>번화한 대도시에서 어머니의 가게를 돕던 어느 날, 다락방 깊은 곳에서 할머니의 낡은 일기장을 발견합니다. 빛바랜 뒷장에는 손으로 그린 지도가 한 장 — 할머니가 젊은 시절, 생애 처음으로 화덕에 불을 지폈다는 작은 빵집으로 이어지는 길이었죠.</p>
+      <p>지도를 따라 도착한 곳은 에르테이아 대륙, 거대한 <strong>루미나스 마법숲</strong> 가장자리. 맑은 별무리 호수와 잔잔한 실베리아 강 사이에 안온하게 자리 잡은 <em>포근잎 마을</em>입니다.</p>
+      <p>먼지가 소복이 쌓인 가게를 쓸고 닦고, 차갑게 식은 화덕에 다시 불을 지피는 것부터. 숲을 거닐며 마법 재료를 모으고, 빵 냄새를 맡고 찾아온 이웃들의 소소한 고민에 귀를 기울이기까지. 그들의 마음을 데워줄 빵을 굽는 매일이 시작됩니다.</p>
+      <p>당신의 화덕은 어떤 이야기를 굽게 될까요?</p>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════ FEATURES ═══════════ -->
+<section class="features">
+  <div class="wrap">
+    <div class="sec-head">
+      <div class="deco">✦ ✦ ✦</div>
+      <h2>마을에서의 하루</h2>
+      <p>오늘은 무얼 하며 보낼까요?</p>
+    </div>
+
+    <div class="slot-grid">
+      <div class="slot pxframe">
+        <span class="icon">🥐</span>
+        <div class="slot-name">제빵</div>
+        <p>포슬포슬 식빵부터 결이 살아있는 크루아상, 축제의 부쉬드노엘까지. 명성이 쌓일수록 화덕이 기억하는 레시피도 늘어납니다.</p>
+      </div>
+
+      <div class="slot pxframe">
+        <span class="icon">🔬</span>
+        <div class="slot-name">레시피 연구</div>
+        <p>숲에서 얻은 신비한 재료를 빵에 조합해보세요. 행운을 부르는 별빛 마들렌, 사랑을 전하는 장미 머핀… 어떤 조합이 통할지는 직접 구워봐야 압니다.</p>
+      </div>
+
+      <div class="slot pxframe">
+        <span class="icon">🗺</span>
+        <div class="slot-name">숲 모험</div>
+        <p>루미나스 숲을 거닐며 재료를 채집하고, 때로는 숲의 마물들과 마주칩니다. 귀여운 마물들도 있지만, 깊은 곳엔 전설의 존재도.</p>
+      </div>
+
+      <div class="slot pxframe">
+        <span class="icon">🌱</span>
+        <div class="slot-name">정원</div>
+        <p>오두막 뒷마당에 씨앗을 심고, 물을 주고, 기다리면. 밀과 사탕수수, 그리고 마법 열매까지 — 닭과 소를 들이면 매일이 조금 더 든든해져요.</p>
+      </div>
+
+      <div class="slot pxframe">
+        <span class="icon">🧿</span>
+        <div class="slot-name">공예</div>
+        <p>모험에서 얻은 재료들로 마음을 담아 부적과 장식품을 만듭니다.</p>
+      </div>
+
+      <div class="slot pxframe">
+        <span class="icon">📋</span>
+        <div class="slot-name">의뢰 게시판</div>
+        <p>마을 게시판에는 사흘마다 새로운 부탁이 붙습니다. 이웃들의 이야기가 당신을 기다려요.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════ FINAL CTA ═══════════ -->
+<section class="final">
+  <div class="wrap">
+    <div class="bread-row" aria-hidden="true">🍞 🥐 🧁 🍪 🎂</div>
+    <h2>포근잎 마을이<br>새 제빵사님을 기다리고 있어요.</h2>
+    <a class="pixel-btn leaf" href="https://drive.proton.me/urls/8P2TW4X3SR#Gude48dqh2BW" target="_blank" rel="noopener" id="gameStart2">🌿 지금 시작하기</a>
+  </div>
+</section>
+
+<footer>
+  <b>🌿 Cozy-Leaf</b>는 RisuAI에서 동작하는 플러그인 게임입니다.<br>
+  캐릭터 카드에 플러그인을 적용하면 채팅 속에서 바로 플레이할 수 있어요.
+</footer>
+
+</body>
+</html>
