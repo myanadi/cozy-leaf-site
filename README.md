@@ -45,6 +45,18 @@
 플러그인 코드만 새로 붙여넣기 하면 **진행 상황은 그대로 유지**됩니다.
 세이브 데이터는 채팅방별로 저장되며, 코드 교체와 무관하게 보존됩니다.
 
+## 저작권 / Copyright
+
+Copyright (c) 2026 myanadi. All Rights Reserved.
+
+이 프로젝트의 모든 권리는 제작자에게 있습니다.
+무단 복제, 재배포, 수정, 판매를 금합니다.
+개인적인 플레이 용도로만 사용해 주세요.
+
+All rights reserved. Unauthorized copying, redistribution,
+modification, or sale is prohibited. For personal play only.
+
+
 ---
 
 ## 🇬🇧 English
